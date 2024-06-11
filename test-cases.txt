@@ -1,0 +1,103 @@
+test cases:
+
+Case = 1
+Grade reduction =11%
+input =E1
+
+output =
+   1  2  3  4  5
+A|25|18| 3|12|23|
+B| 8|13|24|17| 4|
+C|19| 2| 7|22|11|
+D|14| 9|20| 5|16|
+E| 1| 6|15|10|21|
+
+Case = 2
+Grade reduction =11%
+input =A5
+
+output =
+   1  2  3  4  5
+A|23|20|15|10| 1|
+B|14| 9|22| 5|16|
+C|21|24|19| 2|11|
+D| 8|13| 4|17| 6|
+E|25|18| 7|12| 3|
+
+Case = 3
+Grade reduction =11%
+input =A2
+
+output =No knight's tour
+
+Case = 4
+Grade reduction =11%
+input =C3
+
+output =
+   1  2  3  4  5
+A|21|12| 7| 2|19|
+B| 6|17|20|13| 8|
+C|11|22| 1|18| 3|
+D|16| 5|24| 9|14|
+E|23|10|15| 4|25|
+
+Case = 5
+Grade reduction =11%
+input =E5
+
+output =
+   1  2  3  4  5
+A|23|14|19| 8|21|
+B|12| 7|22| 3|18|
+C|15|24|13|20| 9|
+D| 6|11| 2|17| 4|
+E|25|16| 5|10| 1|
+
+Case = 6
+Grade reduction =11%
+input =D1
+
+output =No knight's tour
+
+Case = 7
+Grade reduction =11%
+input =B4
+
+output =
+   1  2  3  4  5
+A|25|16|11| 6|19|
+B|10| 5|18| 1|12|
+C|17|24|15|20| 7|
+D| 4| 9|22|13| 2|
+E|23|14| 3| 8|21|
+
+Case = 8
+Grade reduction =11%
+input =B1
+
+output =No knight's tour
+
+Case = 1e
+Grade reduction =3%
+input =H3
+
+output =Invalid input
+
+Case = 2e
+Grade reduction =3%
+input =A6
+
+output =Invalid input
+
+Case = 3e
+Grade reduction =3%
+input =@1
+
+output =Invalid input
+
+Case = 4e
+Grade reduction =3%
+input =C12
+
+output =Invalid input
