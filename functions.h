@@ -11,6 +11,9 @@
 #define LETTER_TO_ROW(x) x - 'A'; // Convert letter to row index
 #define NUMBER_TO_COL(x) x - '1'; // Convert number to column index
 
+int rowMoves[MAX_CHESS_POS_SIZE];
+int colMoves[MAX_CHESS_POS_SIZE];
+
 // ------------------------------- ex1 ----------------------------------
 chessPosArray* createEmptyChessPosArray();
 chessPosArray*** createBoard();
@@ -34,18 +37,18 @@ void findAllPossibleKnightPathsHelper(treeNode* node, chessPosArray*** posList, 
 pathTree findAllPossibleKnightPaths(chessPos* startingPosition);
 
 // ------------------------------- ex4 ----------------------------------
+void insertCell(chessPosList* lst, chessPosCell* newCell);
+void insertDataToEndList(chessPosList* lst, chessPos position);
 void removeLastCell(chessPosList* lst);
 bool isValidPosition(chessPos position);
 bool isVisited(bool visited[BOARD_SIZE][BOARD_SIZE], chessPos position);
 void markVisited(bool visited[BOARD_SIZE][BOARD_SIZE], chessPos position);
 void unmarkVisited(bool visited[BOARD_SIZE][BOARD_SIZE], chessPos position);
-bool findPathHelper(treeNode* node, bool visited[BOARD_SIZE][BOARD_SIZE], chessPosList* path, int* count);
+bool findPathHelper(int row, int col, int count, bool visited[BOARD_SIZE][BOARD_SIZE], chessPosList* path);
 chessPosList* findKnightPathCoveringAllBoard(pathTree* path_tree);
 
 // ------------------------- helper functions ----------------------------
 void makeEmptyList(chessPosList* lst);
-void insertCell(chessPosList* lst, chessPosCell* newCell);
-void insertDataToEndList(chessPosList* lst, chessPos position);
 void getInput(chessPos* startingPosition);
 void checkInput(chessPos startingPosition, char ch);
 void freeChessPosList(chessPosList* lst);
@@ -53,6 +56,6 @@ void freeChessPosArray(chessPosArray* arr);
 void freeBoard(chessPosArray*** board);
 void freeTreeNodeList(treeNodeList* lst);
 void freeTreeNode(treeNode* node);
-void freePathTree(pathTree* tree);
+void freePathTree(pathTree* tree);	
 void freeMemory(pathTree* allPossiblePaths, chessPosList* knightPath);
-void checkAllocation(void* ptr);
+void checkAllocation(void* ptr);	
