@@ -21,20 +21,13 @@ int main() {
     chessPosList* knightPath = findKnightPathCoveringAllBoard(&allPossiblePaths);   
         
     // Display the knight's path covering all board squares
-    if (knightPath != NULL) {
-        display(knightPath);
-    }
-    else {
-        printf("No knight's tour\n");
-    }
-
+    display(knightPath);
+    
     // Free all the remaining memory
     freeMemory(&(allPossiblePaths), knightPath);
 
     return 0;
 }
-
-
 
 
 
