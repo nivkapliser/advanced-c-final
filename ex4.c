@@ -4,6 +4,39 @@
 #include "dataStructures.h"
 #include "functions.h"
 
+// Function to insert a new cell into the list
+void insertCell(chessPosList* lst, chessPosCell* newCell) {
+    // If the list or newCell is NULL, return
+    if (lst == NULL || newCell == NULL) {
+        return;
+    }
+
+    // If the list is empty, newCell becomes the head and tail
+    if (lst->head == NULL) {
+        lst->head = newCell;
+        lst->tail = newCell;
+    }
+    else {
+        // Otherwise, append newCell to the end of the list
+        lst->tail->next = newCell;
+        lst->tail = newCell;
+    }
+}
+
+// Function to insert a chess position at the end of the list
+void insertDataToEndList(chessPosList* lst, chessPos position) {
+    // Create a new cell for the position
+    chessPosCell* newCell = (chessPosCell*)malloc(sizeof(chessPosCell));
+    checkAllocation((chessPosCell*)newCell);
+
+    newCell->position[0] = position[0];
+    newCell->position[1] = position[1];
+    newCell->next = NULL;
+
+    // Insert the new cell into the list
+    insertCell(lst, newCell);
+}
+
 // Function to remove the last cell from the list
 void removeLastCell(chessPosList* lst) {
     // If the list is empty, return
@@ -34,80 +67,65 @@ bool isValidPosition(chessPos position) {
     return position[0] >= 'A' && position[0] <= 'E' && position[1] >= '1' && position[1] <= '5';
 }
 
-// Function to check if a position has been visited
-bool isVisited(bool visited[BOARD_SIZE][BOARD_SIZE], chessPos position) {
-    int row = LETTER_TO_ROW(position[0]);
-    int col = NUMBER_TO_COL(position[1]);
-    return visited[row][col];
-}
 
-// Function to mark a position as visited
-void markVisited(bool visited[BOARD_SIZE][BOARD_SIZE], chessPos position) {
-    int row = LETTER_TO_ROW(position[0]); 
-    int col = NUMBER_TO_COL(position[1]);
-    visited[row][col] = true;
-}
-
-// Function to mark a position as unvisited
-void unmarkVisited(bool visited[BOARD_SIZE][BOARD_SIZE], chessPos position) {
-    int row = LETTER_TO_ROW(position[0]);
-    int col = NUMBER_TO_COL(position[1]);
-    visited[row][col] = false;
-}
-
-// Recursive helper function to find a path covering all squares on the board
-bool findPathHelper(treeNode* node, bool visited[BOARD_SIZE][BOARD_SIZE], chessPosList* path, int* count) {
-    // Base case: if the position is not valid or already visited, return false
-    if (!isValidPosition(node->position) || isVisited(visited, node->position)) {
-        return false;
-    }
-
-    // Add current position to the path and mark it as visited
-    insertDataToEndList(path, node->position);
-    markVisited(visited, node->position);
-    (*count)++;// Increment count of visited positions
-
+bool findPathHelper(int row, int col, int count, bool visited[BOARD_SIZE][BOARD_SIZE], chessPosList* path) {
+    
     // If all positions on the board are visited, return true
-    if (*count == BOARD_SIZE * BOARD_SIZE) {
+    if (count == BOARD_SIZE * BOARD_SIZE) {
         return true;
     }
 
-    // Recursively explore next possible positions
-    treeNodeListCell* curr = node->next_possible_positions.head;
-    while (curr != NULL) {
-        if (findPathHelper(curr->node, visited, path, count)) {
-            return true;// If a complete path is found, return true
+    // Iterate through all possible moves of the knight
+    for (int i = 0; i < MAX_CHESS_POS_SIZE; i++) {
+        int nextRow = row + rowMoves[i];
+        int nextCol = col + colMoves[i];
+        chessPos newPos = { nextRow + 'A', nextCol + '1' }; // Convert the row and column indices to chess notation
+        // Check if the new position is valid and not visited
+        if (isValidPosition(newPos) && !visited[nextRow][nextCol]) {
+            visited[nextRow][nextCol] = true; // Mark the new position as visited
+            insertDataToEndList(path, newPos); // Add the new position to the path
+
+            // Recursively search for the next position
+            if (findPathHelper(nextRow, nextCol, count + 1, visited, path)) {
+                return true; // If a complete path is found, return true
+            }
+            // If no complete path is found, backtrack by removing the last position from the path
+            else { 
+                visited[nextRow][nextCol] = false;
+                removeLastCell(path);
+            }
         }
-        curr = curr->next;
     }
 
-    // Backtrack: remove last position from the path and unmark it as visited
-    removeLastCell(path);
-    unmarkVisited(visited, node->position);
-    (*count)--; // Decrement count of visited positions
-
-    return false;// No complete path found from this node
+    return false; // No complete path found from this node
 }
 
-// Function to find a knight path covering all squares on the board
+// Function to find a knight's path covering all squares on the board
 chessPosList* findKnightPathCoveringAllBoard(pathTree* path_tree) {
-
-    int count = 0; // Count of visited positions
+    
     bool visited[BOARD_SIZE][BOARD_SIZE] = { false }; // Initialize visited array
+    int row = LETTER_TO_ROW(path_tree->root->position[0]); // Convert the letter to row index
+    int col = NUMBER_TO_COL(path_tree->root->position[1]); // Convert the number to column index
+
+    // Allocate memory for the path list
     chessPosList* allBoardPath = (chessPosList*)malloc(sizeof(chessPosList)); // Allocate memory for the path
     checkAllocation((chessPosList*)allBoardPath);
 
-    makeEmptyList(allBoardPath); // Initialize the path list
+    makeEmptyList(allBoardPath); // Initialize the path list;
+
+    visited[row][col] = true; // Mark the starting position as visited
+    insertDataToEndList(allBoardPath, path_tree->root->position); // Add the starting position to the path
+    int count = 1; // Initialize the count of visited positions
 
     // Find a path covering all squares on the board starting from the root node
-    bool found = findPathHelper(path_tree->root, visited, allBoardPath, &count);
+    bool found = findPathHelper(row, col, count, visited, allBoardPath);
 
     // If a path is found, return it; otherwise, free memory and return NULL
     if (found) {
         return allBoardPath;
     }
     else {
-        freeChessPosList(allBoardPath);  
+        freeChessPosList(allBoardPath);
         return NULL;
     }
 }
