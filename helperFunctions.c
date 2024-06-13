@@ -5,43 +5,13 @@
 #include "dataStructures.h"
 #include "functions.h"
 
+int rowMoves[MAX_CHESS_POS_SIZE] = { -2, -1, 1, 2, 2, 1, -1, -2 };
+int colMoves[MAX_CHESS_POS_SIZE] = { 1, 2, 2, 1, -1, -2, -2, -1 };
+
 // Function to initialize an empty chessPosList
 void makeEmptyList(chessPosList* lst) {
 
 	lst->head = lst->tail = NULL;
-}
-
-// Function to insert a new cell into the list
-void insertCell(chessPosList* lst, chessPosCell* newCell) {
-    // If the list or newCell is NULL, return
-    if (lst == NULL || newCell == NULL) {
-        return;
-    }
-
-    // If the list is empty, newCell becomes the head and tail
-    if (lst->head == NULL) {
-        lst->head = newCell;
-        lst->tail = newCell;
-    }
-    else {
-        // Otherwise, append newCell to the end of the list
-        lst->tail->next = newCell;
-        lst->tail = newCell;
-    }
-}
-
-// Function to insert a chess position at the end of the list
-void insertDataToEndList(chessPosList* lst, chessPos position) {
-    // Create a new cell for the position
-    chessPosCell* newCell = (chessPosCell*)malloc(sizeof(chessPosCell));
-    checkAllocation((chessPosCell*)newCell);
-
-    newCell->position[0] = position[0];
-    newCell->position[1] = position[1];
-    newCell->next = NULL;
-    
-    // Insert the new cell into the list
-    insertCell(lst, newCell);
 }
 
 void getInput(chessPos* startingPosition) {
@@ -50,7 +20,7 @@ void getInput(chessPos* startingPosition) {
     scanf("%s", input);
     startingPosition[0][0] = input[0];
     startingPosition[0][1] = input[1];
-    checkInput(startingPosition, input[2]);
+    checkInput(*startingPosition, input[2]);
 
 }
 
@@ -120,8 +90,13 @@ void freePathTree(pathTree* tree) {
 // Function to free all dynamically allocated memory in the program
 void freeMemory(pathTree* allPossiblePaths, chessPosList* knightPath) {
 
-    freePathTree(allPossiblePaths); // Free the tree of all possible paths
-    freeChessPosList(knightPath); // Free the knight's path covering all board squares
+    if (allPossiblePaths != NULL) {
+        freePathTree(allPossiblePaths); // Free the tree of all possible paths  
+    }
+
+    if (knightPath != NULL) {
+        freeChessPosList(knightPath); // Free the knight's path covering all board squares  
+    }
 }
 
 // Function to check if memory allocation was successful
