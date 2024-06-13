@@ -101,3 +101,4 @@ chessPosArray*** validKnightMoves() {
 
 	return board;
 }
+
