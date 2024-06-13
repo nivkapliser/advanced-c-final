@@ -111,7 +111,12 @@ printf("   1  2  3  4  5\n");
 // Function to display the chess board with unique cell positions
 void display(chessPosList* lst) {
 	
-	removeDuplicates(lst);// Remove duplicate positions
+	if (lst == NULL) {
+		printf("No knight's tour\n");
+		return;
+	}
+
+	removeDuplicates(lst);// Remove duplicate positions	
 	printBoard(lst);// Print the board with unique positions
 
 }
